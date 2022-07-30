@@ -21,4 +21,4 @@ WORKDIR /app/Niffler
 
 COPY install.sh .
 
-#RUN sh ./install.sh
+RUN sh ./install.sh
