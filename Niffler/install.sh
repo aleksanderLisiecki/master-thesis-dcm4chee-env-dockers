@@ -14,7 +14,7 @@ if [ "$PIP" = false ] ; then
     pip install -i https://test.pypi.org/simple/ HITI-anon-internal
     wget https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_64.sh
     sh Anaconda3-2020.11-Linux-x86_64.sh -u -b
-    # source ~/.bashrc
+    source ~/.bashrc
     rm Anaconda3-2020.11-Linux-x86_64.sh -y
     echo "true" > init/pip.out
 fi
