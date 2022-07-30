@@ -1,0 +1,71 @@
+version: "3.4"
+
+services:
+  ldap:
+    image: dcm4che/slapd-dcm4chee:2.6.0-25.2
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+    ports:
+      - ${PORT_PREFIX}${LDAP_PORT}:389
+    env_file: .env
+    volumes:
+      - dcm4chee2-arc_ldap:/var/lib/openldap/openldap-data
+      - dcm4chee2-arc_slapd.d:/etc/openldap/slapd.d
+  db:
+    image: dcm4che/postgres-dcm4chee:14.1-25
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+    ports:
+      - ${PORT_PREFIX}${DB_PORT}:5432
+    env_file: .env
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - dcm4chee2-arc_db:/var/lib/postgresql/data
+  arc:
+    image: dcm4che/dcm4chee-arc-psql:5.25.2
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+    ports:
+      - ${PORT_PREFIX}${ARC_PORT_1}:8080
+      - ${PORT_PREFIX}${ARC_PORT_2}:8443
+      - ${PORT_PREFIX}${ARC_PORT_3}:9990
+      - ${PORT_PREFIX}${ARC_PORT_4}:9993
+      - ${PORT_PREFIX}${ARC_PORT_5}:2762
+    env_file: .env
+    environment:
+      WILDFLY_CHOWN: /opt/wildfly/standalone /storage
+      WILDFLY_WAIT_FOR: ldap:389 db:5432
+    depends_on:
+      - ldap
+      - db
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - dcm4chee2-arc_wildfly:/opt/wildfly/standalone
+      - dcm4chee2-arc_storage:/storage
+  ohif:
+    image: ohif/viewer:v2.11.8.7749
+    ports:
+      - ${PORT_PREFIX}${OHIF_PORT}:80
+    volumes:
+      - ohif:/usr/share/nginx/html/
+      
+volumes:
+  ohif:
+    name: ohif2
+    external: true
+  
+  dcm4chee2-arc_ldap:
+  dcm4chee2-arc_slapd.d:
+
+  dcm4chee2-arc_db:
+
+  dcm4chee2-arc_wildfly:
+  dcm4chee2-arc_storage:
