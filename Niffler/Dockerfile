@@ -2,7 +2,7 @@
 
 FROM centos:centos7
 
-#RUN yum -y reinstall "*" && yum clean all
+RUN yum -y reinstall "*" && yum clean all
 
 RUN yum -y install \
             sudo \ 
@@ -10,7 +10,8 @@ RUN yum -y install \
             vim \
             nano \
             wget \
-           # && yum clean all
+            unzip \
+            && yum clean all
 
 RUN mkdir app
 WORKDIR /app

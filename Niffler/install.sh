@@ -10,12 +10,12 @@ if [ "$PIP" = false ] ; then
     sudo yum install -y python3
     echo "Installing pip"
     sudo yum install python3-pip
-    pip install -r requirements.txt
-    pip install -i https://test.pypi.org/simple/ HITI-anon-internal
+    pip3 install -r requirements.txt
+    pip3 install -i https://test.pypi.org/simple/ HITI-anon-internal
     wget https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_64.sh
     sh Anaconda3-2020.11-Linux-x86_64.sh -u -b
     source ~/.bashrc
-    rm Anaconda3-2020.11-Linux-x86_64.sh -y
+    unlik Anaconda3-2020.11-Linux-x86_64.sh
     echo "true" > init/pip.out
 fi
 
@@ -44,7 +44,7 @@ if [ "$DCM4CHE" = false ] ; then
     cd ..
     wget https://sourceforge.net/projects/dcm4che/files/dcm4che3/5.22.5/dcm4che-5.22.5-bin.zip/download -O dcm4che-5.22.5-bin.zip
     unzip dcm4che-5.22.5-bin.zip
-    rm dcm4che-5.22.5-bin.zip -y
+    unlik dcm4che-5.22.5-bin.zip
     cd Niffler
     echo "true" > init/dcm4che.out
 fi
@@ -67,8 +67,8 @@ fi
 SERVICE=`head -n 1 init/service.out`
 if [ "$SERVICE" = false ] ; then
     echo "Installing Niffler Frontend"
-    pip install -r modules/frontend/requirements.txt
-    pip install -i https://test.pypi.org/simple/ HITI-anon-internal
+    pip3 install -r modules/frontend/requirements.txt
+    pip3 install -i https://test.pypi.org/simple/ HITI-anon-internal
     chmod +x modules/frontend/service/frontend_service.sh
     sudo cp modules/frontend/service/niffler.service /etc/systemd/system/
     sudo systemctl daemon-reload
